@@ -196,11 +196,9 @@ class GerenciadorCheckout {
             elementoSubtotal.textContent = "R$ 0,00";
 
             const elFrete = document.getElementById("shipping");
-            const elTaxas = document.getElementById("taxes");
             const elTotal = document.getElementById("total");
 
             if (elFrete) elFrete.textContent = "R$ 0,00";
-            if (elTaxas) elTaxas.textContent = "R$ 0,00";
             if (elTotal) elTotal.textContent = "R$ 0,00";
 
             return;
@@ -228,23 +226,17 @@ class GerenciadorCheckout {
         }, 0);
 
         const frete = subtotal > 100 ? 0 : 15.90;
-        const taxas = subtotal * 0.05;
-        const total = subtotal + frete + taxas;
+        const total = subtotal + frete;
 
         elementoSubtotal.textContent = `R$ ${subtotal.toFixed(2).replace(".", ",")}`;
 
         const elFrete = document.getElementById("shipping");
-        const elTaxas = document.getElementById("taxes");
         const elTotal = document.getElementById("total");
 
         if (elFrete) {
             elFrete.textContent = frete === 0
                 ? "Grátis"
                 : `R$ ${frete.toFixed(2).replace(".", ",")}`;
-        }
-
-        if (elTaxas) {
-            elTaxas.textContent = `R$ ${taxas.toFixed(2).replace(".", ",")}`;
         }
 
         if (elTotal) {

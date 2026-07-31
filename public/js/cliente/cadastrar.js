@@ -151,47 +151,57 @@ document.addEventListener("DOMContentLoaded", function () {
     telefone.addEventListener("input", function () {
         telefone.value = aplicarMascaraTelefone(telefone.value);
     });
-
+    
     btn.addEventListener("click", function () {
 
         resetarBordas();
 
-        let erros = [];
-
         if (nome.value.trim() === "") {
-            erros.push(nome);
+            nome.style.borderColor = "red";
+            nome.focus();
+            alert("Informe o nome do cliente.");
+            return;
         }
 
         if (!validarCPF(cpf.value)) {
-            erros.push(cpf);
+            cpf.style.borderColor = "red";
+            cpf.focus();
+            alert("CPF inválido.");
+            return;
         }
 
         if (!validarNascimento(nascimento.value)) {
-            erros.push(nascimento);
+            nascimento.style.borderColor = "red";
+            nascimento.focus();
+            alert("O cliente deve possuir idade entre 18 e 120 anos.");
+            return;
         }
 
         if (genero.value === "") {
-            erros.push(genero);
+            genero.style.borderColor = "red";
+            genero.focus();
+            alert("Selecione o gênero.");
+            return;
         }
 
         if (!validarTelefone(telefone.value)) {
-            erros.push(telefone);
+            telefone.style.borderColor = "red";
+            telefone.focus();
+            alert("Telefone inválido. Informe DDD + número com 9 dígitos.");
+            return;
         }
 
         if (!validarEmail(email.value.trim())) {
-            erros.push(email);
+            email.style.borderColor = "red";
+            email.focus();
+            alert("E-mail inválido.");
+            return;
         }
 
         if (senha.value.trim().length < 6) {
-            erros.push(senha);
-        }
-
-        if (erros.length > 0) {
-            erros.forEach(function (campo) {
-                campo.style.borderColor = "red";
-            });
-
-            alert("Confira os dados: CPF válido, e-mail válido, telefone com DDD e 9 dígitos, idade mínima 18 anos e senha com no mínimo 6 caracteres.");
+            senha.style.borderColor = "red";
+            senha.focus();
+            alert("A senha deve possuir no mínimo 6 caracteres.");
             return;
         }
 
@@ -211,19 +221,24 @@ document.addEventListener("DOMContentLoaded", function () {
                 ativo: ativo.checked ? "s" : "n"
             })
         })
-        .then(function (resposta) {
-            return resposta.json();
-        })
-        .then(function (corpo) {
-            alert(corpo.msg);
+            .then(function (resposta) {
+                return resposta.json();
+            })
+            .then(function (corpo) {
 
-            if (corpo.ok) {
-                window.location.href = "/cliente";
-            }
-        })
-        .catch(function (erro) {
-            console.error("ERRO AO CADASTRAR CLIENTE:", erro);
-            alert("Erro interno ao cadastrar cliente.");
-        });
+                if (corpo.ok) {
+                    alert("Cliente cadastrado com sucesso!");
+                    window.location.href = "/cliente";
+                } else {
+                    alert(corpo.msg);
+                }
+
+            })
+            .catch(function (erro) {
+                console.error("ERRO AO CADASTRAR CLIENTE:", erro);
+                alert("Erro interno ao cadastrar cliente.");
+            });
+
     });
+
 });

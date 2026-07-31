@@ -92,7 +92,9 @@ class ProdutosController {
                 req.body.nome &&
                 req.body.nome.trim() !== "" &&
                 req.body.preco &&
+                Number(req.body.preco) > 0 &&
                 req.body.estoque &&
+                Number(req.body.estoque) > 0 &&
                 req.body.categoria &&
                 req.body.categoria !== "0" &&
                 req.body.tipo &&
@@ -130,7 +132,7 @@ class ProdutosController {
                 }
 
             } else {
-                msg = "Preencha todos os campos obrigatórios do produto.";
+                msg = "Preencha todos os campos obrigatórios. Preço e estoque devem ser maiores que zero.";
             }
 
             res.send({ ok, msg });
@@ -193,7 +195,9 @@ class ProdutosController {
                 req.body.nome &&
                 req.body.nome.trim() !== "" &&
                 req.body.preco &&
+                Number(req.body.preco) > 0 &&
                 req.body.estoque &&
+                Number(req.body.estoque) > 0 &&
                 req.body.categoria &&
                 req.body.categoria !== "0" &&
                 req.body.tipo &&
@@ -241,7 +245,7 @@ class ProdutosController {
                 }
 
             } else {
-                msg = "Preencha corretamente todos os campos obrigatórios.";
+                msg = "Preencha corretamente todos os campos obrigatórios. Preço e estoque devem ser maiores que zero.";
             }
 
             res.send({ ok, msg });
