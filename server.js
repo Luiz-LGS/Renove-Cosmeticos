@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 // ==============================
 // IMPORTAÇÕES
 // ==============================
@@ -9,7 +7,6 @@ const expressLayouts = require("express-ejs-layouts");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 const AuthMiddleware = require("./middlewares/authMiddleware");
-
 
 // ==============================
 // IMPORTAÇÃO DAS ROTAS
@@ -33,13 +30,11 @@ const promocaoRoute = require("./routes/promocaoRoute");
 const pedidoRoute = require("./routes/pedidoRoute");
 const devolucaoRoute = require("./routes/devolucaoRoute");
 
-
 // ==============================
 // CONFIGURAÇÃO DO SERVIDOR
 // ==============================
 
 const server = express();
-
 
 // ==============================
 // CONFIGURAÇÃO DO EJS
@@ -47,30 +42,17 @@ const server = express();
 
 server.set("view engine", "ejs");
 server.set("layout", "./layout");
-
-// CORREÇÃO PARA VERCEL
-server.set(
-    "views",
-    path.join(__dirname, "views")
-);
-
+server.set("views", path.join(__dirname, "views"));
 
 // ==============================
 // MIDDLEWARES
 // ==============================
 
-// CORREÇÃO PARA VERCEL
-server.use(
-    express.static(
-        path.join(__dirname, "public")
-    )
-);
-
+server.use(express.static(path.join(__dirname, "public")));
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
 server.use(expressLayouts);
 server.use(cookieParser());
-
 
 // ==============================
 // ROTAS PÚBLICAS
@@ -82,18 +64,13 @@ server.use("/cadastro", cadastroRoute);
 server.use("/produtos", produtosRoute);
 server.use("/perfil", perfilRoute);
 
-
 // ==============================
 // MIDDLEWARE DE AUTENTICAÇÃO
 // ==============================
 
-let auth = new AuthMiddleware();
+const auth = new AuthMiddleware();
 
-// CORREÇÃO CONTEXT BIND
-server.use(
-    auth.verificarUsuarioLogado.bind(auth)
-);
-
+server.use(auth.verificarUsuarioLogado.bind(auth));
 
 // ==============================
 // ROTAS PRIVADAS
@@ -112,35 +89,19 @@ server.use("/promocao", promocaoRoute);
 server.use("/pedido", pedidoRoute);
 server.use("/devolucao", devolucaoRoute);
 
-
 // ==============================
 // VARIÁVEIS GLOBAIS
 // ==============================
 
 global.CAMINHO_IMG = "/img/produtos/";
-
-// CORREÇÃO PARA VERCEL
-global.CAMINHO_IMG_ABS = path.join(__dirname,"public","img","produtos") + path.sep;
-
+global.CAMINHO_IMG_ABS = path.join(__dirname, "public", "img", "produtos") + path.sep;
 
 // ==============================
 // INICIALIZAÇÃO DO SERVIDOR
 // ==============================
 
-// LOCALHOST
-if (process.env.NODE_ENV !== "production") {
+server.listen(5000, "0.0.0.0", () => {
+    console.log("Servidor funcionando em http://localhost:5000");
+});
 
-    server.listen(
-        5000,
-        "0.0.0.0",
-        function () {
-
-            console.log(
-                "Servidor funcionando!"
-            );
-        }
-    );
-}
-
-// EXPORTAÇÃO PARA VERCEL
 module.exports = server;

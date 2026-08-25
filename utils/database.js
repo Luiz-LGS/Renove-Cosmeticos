@@ -16,28 +16,15 @@ class Database {
 
     constructor() {
 
-        if (!pool) {
-
-            pool = mysql.createPool({
-
-                host: process.env.DB_HOST,
-                database: process.env.DB_DATABASE,
-                user: process.env.DB_USER,
-                password: process.env.DB_PASSWORD,
-                port: process.env.DB_PORT,
-
-                waitForConnections: true,
-                connectionLimit: 5,
-                queueLimit: 0,
-
-                idleTimeout: 30000
-
-            });
-
-            console.log("POOL MYSQL INICIADO");
-        }
-
-        this.#conexao = pool;
+        this.#conexao = mysql.createPool({
+            host: 'localhost', //endereço do nosso banco de dados na nuvem
+            database: 'renove', //a database de cada um de vocês possui a nomenclatura PFS1_(RA)
+            user: 'root', // usuario e senha de cada um de vocês é o RA
+            password: '',
+            waitForConnections: true,
+            connectionLimit: 100, // Limite de conexões
+            queueLimit: 0 // Sem limite na fila de conexões
+        });
     }
 
     ExecutaComando(sql, valores = []) {
