@@ -1,5 +1,7 @@
 
 const mysql = require("mysql2");
+const fs = require("fs");
+const path = require("path");
 const { attachDatabasePool } = require("@vercel/functions");
 
 class Database {
@@ -25,7 +27,11 @@ class Database {
             password: process.env.DB_PASSWORD,
 
             ssl: {
-                minVersion: "TLSv1.2"
+                ca: fs.readFileSync(
+                    path.join(__dirname, "../certs/isrgrootx1.pem")
+                ),
+                minVersion: "TLSv1.2",
+                rejectUnauthorized: true
             },
 
             waitForConnections: true,
