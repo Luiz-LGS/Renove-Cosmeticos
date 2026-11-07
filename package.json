@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Renove é um sistema de gestão para farmácias desenvolvido para auxiliar no controle de produtos, categorias e estoque. A aplicação permite o registro seguro de operações e atualização automática das informações, proporcionando organização, eficiência e maior confiabilidade nos processos administrativos.",
   "main": "server.js",
+  "engines": {
+    "node": "22.x"
+},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
