@@ -100,8 +100,14 @@ global.CAMINHO_IMG_ABS = path.join(__dirname, "public", "img", "produtos") + pat
 // INICIALIZAÇÃO DO SERVIDOR
 // ==============================
 
-server.listen(5000, "0.0.0.0", () => {
-    console.log("Servidor funcionando em http://localhost:5000");
-});
+// Executa o servidor somente quando iniciado localmente
+if (require.main === module) {
 
+    server.listen(process.env.PORT || 5000, () => {
+        console.log("Servidor funcionando na porta " + (process.env.PORT || 5000));
+    });
+
+}
+
+// Exporta o Express para o Vercel
 module.exports = server;
