@@ -1,6 +1,7 @@
-const mysql = require("mysql2");
 
-let pool = null;
+const mysql = require("mysql2");
+const fs = require("fs");
+const path = require("path");
 
 class Database {
 
@@ -17,14 +18,26 @@ class Database {
     constructor() {
 
         this.#conexao = mysql.createPool({
-            host: 'localhost', //endereço do nosso banco de dados na nuvem
-            database: 'renove', //a database de cada um de vocês possui a nomenclatura PFS1_(RA)
-            user: 'root', // usuario e senha de cada um de vocês é o RA
-            password: '',
+
+            host: process.env.DB_HOST,
+            port: Number(process.env.DB_PORT),
+            database: process.env.DB_NAME,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+
+            ssl: {
+                ca: fs.readFileSync(
+                    path.join(__dirname, "../certs/isrgrootx1.pem")
+                ),
+                rejectUnauthorized: true
+            },
+
             waitForConnections: true,
-            connectionLimit: 100, // Limite de conexões
-            queueLimit: 0 // Sem limite na fila de conexões
+            connectionLimit: 10,
+            queueLimit: 0
+
         });
+
     }
 
     ExecutaComando(sql, valores = []) {
@@ -45,6 +58,7 @@ class Database {
             });
 
         });
+
     }
 
     ExecutaComandoNonQuery(sql, valores = []) {
@@ -65,6 +79,7 @@ class Database {
             });
 
         });
+
     }
 
     ExecutaComandoLastInserted(sql, valores = []) {
@@ -85,7 +100,9 @@ class Database {
             });
 
         });
+
     }
+
 }
 
 module.exports = Database;
