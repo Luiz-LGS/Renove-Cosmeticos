@@ -1,8 +1,8 @@
 require("dotenv").config();
+
 // ==============================
 // IMPORTAÇÕES
 // ==============================
-
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const cookieParser = require("cookie-parser");
@@ -12,7 +12,6 @@ const AuthMiddleware = require("./middlewares/authMiddleware");
 // ==============================
 // IMPORTAÇÃO DAS ROTAS
 // ==============================
-
 const homeRoute = require("./routes/homeRoute");
 const checkoutRoute = require("./routes/checkoutRoute");
 const loginRoute = require("./routes/loginRoute");
@@ -34,13 +33,11 @@ const devolucaoRoute = require("./routes/devolucaoRoute");
 // ==============================
 // CONFIGURAÇÃO DO SERVIDOR
 // ==============================
-
 const server = express();
 
 // ==============================
 // CONFIGURAÇÃO DO EJS
 // ==============================
-
 server.set("view engine", "ejs");
 server.set("layout", "./layout");
 server.set("views", path.join(__dirname, "views"));
@@ -48,7 +45,6 @@ server.set("views", path.join(__dirname, "views"));
 // ==============================
 // MIDDLEWARES
 // ==============================
-
 server.use(express.static(path.join(__dirname, "public")));
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
@@ -58,7 +54,6 @@ server.use(cookieParser());
 // ==============================
 // ROTAS PÚBLICAS
 // ==============================
-
 server.use("/", homeRoute);
 server.use("/login", loginRoute);
 server.use("/cadastro", cadastroRoute);
@@ -68,15 +63,12 @@ server.use("/perfil", perfilRoute);
 // ==============================
 // MIDDLEWARE DE AUTENTICAÇÃO
 // ==============================
-
 const auth = new AuthMiddleware();
-
 server.use(auth.verificarUsuarioLogado.bind(auth));
 
 // ==============================
 // ROTAS PRIVADAS
 // ==============================
-
 server.use("/checkout", checkoutRoute);
 server.use("/usuario", usuarioRoute);
 server.use("/cliente", clienteRoute);
@@ -93,22 +85,19 @@ server.use("/devolucao", devolucaoRoute);
 // ==============================
 // VARIÁVEIS GLOBAIS
 // ==============================
-
 global.CAMINHO_IMG = "/img/produtos/";
 global.CAMINHO_IMG_ABS = path.join(__dirname, "public", "img", "produtos") + path.sep;
 
 // ==============================
 // INICIALIZAÇÃO DO SERVIDOR
 // ==============================
-
-// Executa o servidor somente quando iniciado localmente
+// Executa o servidor somente quando iniciado localmente (não afeta o ambiente serverless da Vercel)
 if (require.main === module) {
-
-    server.listen(process.env.PORT || 5000, () => {
-        console.log("Servidor funcionando na porta " + (process.env.PORT || 5000));
+    const port = process.env.PORT || 5000;
+    server.listen(port, () => {
+        console.log(`Servidor a funcionar na porta ${port}`);
     });
-
 }
 
-// Exporta o Express para o Vercel
+// Exporta a app Express para a Vercel
 module.exports = server;
